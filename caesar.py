@@ -52,9 +52,17 @@ def get_key():
 
 
 def brute_force(message):
+    results = []
+
     for key in range(26):
-        result = decrypt(message, key)
-        print("Key:", key, "| Message:", result)
+        decrypted = decrypt(message, key)
+
+        results.append({
+            "key": key,
+            "message": decrypted
+        })
+
+    return results
 
 
 def letter_frequency(message):
@@ -96,6 +104,7 @@ def chi_square(message):
     return score
 
 
+
 def auto_crack(message):
     results = []
 
@@ -109,9 +118,11 @@ def auto_crack(message):
 
     best_score, best_key, best_message = results[0]
 
-    print("Most likely key:", best_key)
-    print("Decrypted message:", best_message)
-    print("Chi-square score:", round(best_score, 2))
+    return {
+        "key": best_key,
+        "message": best_message,
+        "score": best_score
+    }
 
 
 
@@ -119,43 +130,7 @@ def auto_crack(message):
 
 
 
-while True:
-    print("\n=== Caesar Cipher ===")
-    print("e - Encrypt")
-    print("d - Decrypt")
-    print("b - Brute force")
-    print("a - Auto crack")
-    print("q - Quit")
 
-    choice = input("Choose an option: ").strip().lower()
-
-    if choice == "q":
-        print("Goodbye!")
-        break
-
-    elif choice == "e":
-        message = input("Enter message to encrypt: ")
-        key = get_key()
-
-        result = encrypt(message, key)
-        print("Encrypted message:", result)
-
-    elif choice == "d":
-        message = input("Enter message to decrypt: ")
-        key = get_key()
-        result = decrypt(message, key)
-        print("Decrypted message:", result)
-
-    elif choice == "b":
-        message = input("Enter encrypted message: ")
-        brute_force(message)
-
-    elif choice == "a":
-        message = input("Enter encrypted message: ")
-        auto_crack(message)
-
-    else:
-        print("Invalid option. Please try again.")
 
 
 
