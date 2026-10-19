@@ -1,4 +1,5 @@
-
+import re
+from wordfreq import zipf_frequency
 english_freq = {
     "A": 8.17, "B": 1.49, "C": 2.78,
     "D": 4.25, "E": 12.70, "F": 2.23,
@@ -10,6 +11,21 @@ english_freq = {
     "V": 0.98, "W": 2.36, "X": 0.15,
     "Y": 1.97, "Z": 0.07
 }
+
+
+def english_word_score(message):
+    words = re.findall(r"[A-Za-z]+", message.lower())
+
+    score = 0
+
+    for word in words:
+        frequency = zipf_frequency(word, "en")
+
+        if frequency >= 2.5:
+            score += 1 + frequency
+
+    return score
+
 
 def encrypt(message , key):
     encrypted_message = ""
@@ -110,19 +126,28 @@ def auto_crack(message):
 
     for key in range(26):
         decrypted = decrypt(message, key)
-        score = chi_square(decrypted)
 
-        results.append((score, key, decrypted))
+        word_score = english_word_score(decrypted)
+        frequency_score = chi_square(decrypted)
+
+        results.append((
+            -word_score,
+            frequency_score,
+            key,
+            decrypted
+        ))
 
     results.sort()
 
-    best_score, best_key, best_message = results[0]
+    negative_word_score, best_score, best_key, best_message = results[0]
 
     return {
         "key": best_key,
         "message": best_message,
-        "score": best_score
+        "score": best_score,
+        "word_score": -negative_word_score
     }
+
 
 
 

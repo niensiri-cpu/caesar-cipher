@@ -1,7 +1,13 @@
 
 import unittest
 
-from caesar import encrypt, decrypt, brute_force
+from caesar import (
+    encrypt,
+    decrypt,
+    brute_force,
+    auto_crack,
+    english_word_score
+)
 
 
 class TestCaesarCipher(unittest.TestCase):
@@ -30,6 +36,19 @@ class TestCaesarCipher(unittest.TestCase):
 
         self.assertEqual(len(results), 26)
         self.assertEqual(results[3]["message"], "HELLO")
+    
+    def test_english_word_score(self):
+        hello_score = english_word_score("HELLO")
+        fake_score = english_word_score("WTAAD")
+
+        self.assertGreater(hello_score, fake_score)
+
+    def test_auto_crack(self):
+        result = auto_crack("KHOOR")
+
+        self.assertEqual(result["key"], 3)
+        self.assertEqual(result["message"], "HELLO")
+
 
 
 if __name__ == "__main__":
