@@ -14,7 +14,7 @@ english_freq = {
 def encrypt(message , key):
     encrypted_message = ""
     for letter in message:
-        if letter.isalpha() and letter.isascii(): # makes it so that only alpha letters and symbols 
+        if letter.isalpha() and letter.isascii():
             letter = letter.upper()
             number = ord(letter) - ord("A")
             encrypted_number = (number + key) % 26
@@ -28,7 +28,7 @@ def encrypt(message , key):
 def decrypt(message, key):
     decrypted_message = ""
     for letter in message:
-        if letter.isalpha() and letter.isascii(): # makes it so that only alpha letters and symbols 
+        if letter.isalpha() and letter.isascii():
             letter = letter.upper()
             number = ord(letter) - ord("A")
             decrypted_number = (number - key) % 26
@@ -38,6 +38,17 @@ def decrypt(message, key):
         else:
             decrypted_message += letter
     return(decrypted_message)
+
+
+def get_key():
+    while True:
+        try:
+            key = int(input("Enter key: "))
+            return key
+
+        except ValueError:
+            print("Invalid key. Please enter a whole number.")
+
 
 
 def brute_force(message):
@@ -107,34 +118,45 @@ def auto_crack(message):
 
 
 
-print("=== Caesar Cipher ===")
 
-choice = input("Encrypt,decrypt,brute force, autocrack? (e/d/b/a): ").lower()
+while True:
+    print("\n=== Caesar Cipher ===")
+    print("e - Encrypt")
+    print("d - Decrypt")
+    print("b - Brute force")
+    print("a - Auto crack")
+    print("q - Quit")
 
-if choice == "e":
-    message = input("Enter message to encrypt: ")
-    key = int(input("Enter encryption key: "))
+    choice = input("Choose an option: ").strip().lower()
 
-    result = encrypt(message, key)
-    print("Encrypted message:", result)
+    if choice == "q":
+        print("Goodbye!")
+        break
 
-elif choice == "d":
-    message = input("Enter message to decrypt: ")
-    key = int(input("Enter decryption key: "))
+    elif choice == "e":
+        message = input("Enter message to encrypt: ")
+        key = get_key()
 
-    result = decrypt(message, key)
-    print("Decrypted message:", result)
+        result = encrypt(message, key)
+        print("Encrypted message:", result)
 
-elif choice == "b":
-    message = input("Enter encrypted message: ")
-    brute_force(message)
+    elif choice == "d":
+        message = input("Enter message to decrypt: ")
+        key = get_key()
+        result = decrypt(message, key)
+        print("Decrypted message:", result)
 
-elif choice == "a":
-    message = input("Enter encrypted message: ")
-    auto_crack(message)
+    elif choice == "b":
+        message = input("Enter encrypted message: ")
+        brute_force(message)
 
-else:
-    print("Invalid choice. Please enter e, d, b, or a.")
+    elif choice == "a":
+        message = input("Enter encrypted message: ")
+        auto_crack(message)
+
+    else:
+        print("Invalid option. Please try again.")
+
 
 
 
